@@ -1,9 +1,9 @@
 version: 2.1
 
 parameters:
-  test_param:
-    type: string
-    default: test
+  deploy_app:
+    type: boolean
+    default: false
 
 jobs:
   deploy:
@@ -11,15 +11,15 @@ jobs:
       - image: cimg/base:stable
     description: Deploys an application given its Github repository and the parameters needed for its Kubernetes deployment
     parameters:
-      test_param:
-        type: string
-        default: pouet
+      deploy_app:
+        type: boolean
+        default: false
+    when: << parameters.deploy_app >>
     steps:
-      - run: echo << parameters.test_param >>
+      - run: echo "Oui déploiement"
 
 workflows:
   deploy-stack:
-    when: << pipeline.parameters.test_param >>
     jobs:
       - deploy:
-          test_param: << pipeline.parameters.test_param >>
+          deploy_app: << pipeline.parameters.deploy_app >>
