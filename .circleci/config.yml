@@ -14,9 +14,11 @@ jobs:
       deploy_app:
         type: boolean
         default: false
-    when: << parameters.deploy_app >>
     steps:
-      - run: echo "Oui déploiement"
+      - when:
+          condition: << parameters.deploy_app >>
+          steps:
+            - run: echo "Oui déploiement"
 
 workflows:
   deploy-stack:
