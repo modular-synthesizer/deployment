@@ -1,9 +1,15 @@
 version: 2.1
 
 parameters:
-  deploy_app:
+  # TRUE to deploy the frontend in the pipeline, FALSE otherwise.
+  frontend:
     type: boolean
     default: false
+  # TRUE to deploy the API in the pipeline, FALSE otherwise.
+  api:
+    type: boolean
+    default: false
+
 
 jobs:
   deploy:
@@ -11,21 +17,36 @@ jobs:
       - image: cimg/base:stable
     description: Deploys an application given its Github repository and the parameters needed for its Kubernetes deployment
     parameters:
-      deploy_app:
+      frontend:
+        type: boolean
+        default: false
+      api:
         type: boolean
         default: false
     steps:
       - when:
-          condition: << parameters.deploy_app >>
+          condition: << parameters.frontend >>
           steps:
-            - run: echo "Oui déploiement"
+            - run: echo "Oui déploiement frontend"
       - unless:
-          condition: << parameters.deploy_app >>
+          condition: << parameters.frontend >>
           steps:
-            - run: echo "Non déploiement"
+            - run: echo "Non déploiement frontend"
+      - when:
+          condition: << parameters.api >>
+          steps:
+            - run: echo "Oui déploiement API"
+      - unless:
+          condition: << parameters.api >>
+          steps:
+            - run: echo "Non déploiement API"
+
+commands:
+
 
 workflows:
   deploy-stack:
     jobs:
       - deploy:
-          deploy_app: << pipeline.parameters.deploy_app >>
+          api: << pipeline.parameters.api >>
+          frontend: << pipeline.parameters.frontend >>
