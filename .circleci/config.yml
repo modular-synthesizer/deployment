@@ -1,0 +1,25 @@
+version: 2.1
+
+parameters:
+  test_param:
+    type: string
+    default: test
+
+jobs:
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    description: Deploys an application given its Github repository and the parameters needed for its Kubernetes deployment
+    parameters:
+      test_param:
+        type: string
+        default: pouet
+    steps:
+      - run: echo << parameters.test_param >>
+
+workflows:
+  deploy-stack:
+    when: << pipeline.parameters.test_param >>
+    jobs:
+      - deploy:
+          test_param: << pipeline.parameters.test_param >>
