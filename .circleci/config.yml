@@ -21,6 +21,9 @@ jobs:
       repository:
         type: string
         default: API_REPOSITORY
+      app:
+        type: string
+        default: api
     steps:
       - checkout
       - run:
