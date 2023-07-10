@@ -28,14 +28,13 @@ jobs:
           command: cat ./environments/<< parameters.env >>/.env >> $BASH_ENV
       - kube/install-kubectl
       - kube/install-kubeconfig
-      - setup_remote_docker:
-          version: 20.10.14
       - run:
           name: Authenticate on Docker HUB from environment variable
           command: echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
       - fetch_version:
           repository: << parameters.repository >>
-      - deploy_stack
+      - deploy_stack:
+          app: << parameters.app >>
 
 commands:
   fetch_version:
@@ -43,6 +42,9 @@ commands:
       repository:
         type: string
         default: API_REPOSITORY
+      env:
+        type: string
+        default: dev
     steps:
       - run:
           name: Tags storage
@@ -51,10 +53,23 @@ commands:
           name: Last version traces
           command: export LAST_VERSION=$(cat tags.json | jq .results | jq .[0] | jq .name) && echo "export VERSION=${LAST_VERSION}" >> $BASH_ENV
   deploy_stack:
+    parameters:
+      app:
+        type: string
+        default: api
     steps:
       - run:
           name: Version tracing
           command: cat $BASH_ENV
+      - run:
+          name: Kubernetes deployment update
+          command: sed -e "s/<VERSION>/${VERSION}/g" -e "s/<NAMESPACE>/${NAMESPACE}/g" apps/<< parameters.app >>/deployment.yml | kubectl apply -f -
+      - run:
+          name: Kubernetes service update
+          command: sed -e "s/<NAMESPACE>/${NAMESPACE}/g" apps/<< parameters.app >>/service.yml | kubectl apply -f -
+      - run:
+          name: Kubernetes ingress update
+          command: sed -e "s/<NAMESPACE>/${NAMESPACE}/g" -e "s/<PREFIX>/${INGRESS_PREFIX}/g" apps/<< parameters.app >>/ingress.yml | kubectl apply -f -
 
 workflows:
   deploy-stack:
@@ -62,6 +77,8 @@ workflows:
       - deploy:
           env: << pipeline.parameters.env >>
           repository: GUI_REPOSITORY
+          app: frontend
       - deploy:
           env: << pipeline.parameters.env >>
           repository: API_REPOSITORY
+          app: api
