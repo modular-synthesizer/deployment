@@ -62,8 +62,8 @@ commands:
         default: api
     steps:
       - run:
-          name: Version tracing
-          command: cat $BASH_ENV
+          name: Deployment traces
+          command: echo "deploying version ${VERSION} in namespace ${KUBE_NS} and ingress prefix ${INGRESS_PREFIX}"
       - run:
           name: Kubernetes deployment update
           command: sed -e "s/<VERSION>/${VERSION}/g" -e "s/<NAMESPACE>/${KUBE_NS}/g" apps/<< parameters.app >>/deployment.yml | kubectl apply -f -
