@@ -23,9 +23,6 @@ jobs:
       - run:
           name: Configuration storage
           command: cat ./environments/<< parameters.env >>/.env >> $BASH_ENV
-      - run:
-          name: Kubernetes config parse
-          command:
       - kube/install-kubectl
       - kube/install-kubeconfig
       - setup_remote_docker:
