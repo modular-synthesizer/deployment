@@ -31,4 +31,4 @@ workflows:
   deploy-stack:
     jobs:
       - deploy:
-          env: dev
+          env: << pipeline.parameters.env >>
