@@ -33,11 +33,12 @@ jobs:
       - run:
           name: Authenticate on Docker HUB from environment variable
           command: echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
-      - deploy_application:
+      - fetch_version:
           repository: << parameters.repository >>
+      - deploy_stack
 
 commands:
-  deploy_application:
+  fetch_version:
     parameters:
       repository:
         type: string
@@ -49,6 +50,8 @@ commands:
       - run:
           name: Last version traces
           command: export LAST_VERSION=$(cat tags.json | jq .results | jq .[0] | jq .name) && echo "export VERSION=${LAST_VERSION}" >> $BASH_ENV
+  deploy_stack:
+    steps:
       - run:
           name: Version tracing
           command: cat $BASH_ENV
