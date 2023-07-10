@@ -16,6 +16,7 @@ jobs:
         type: string
         default: dev
     steps:
+      - checkout
       - run:
           name: Configuration storage
           command: cat ./environments/<< parameters.env >>.env >> $BASH_ENV
