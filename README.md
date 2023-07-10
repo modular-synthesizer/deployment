@@ -9,9 +9,7 @@ This project holds all the logic to deploy an entire environment of the Synple a
 ### Environment variables
 
 Environment variables needed for the deployment to work are :
-* __DOCKER_USERNAME__ : the username credential for the account conneting to the docker repositories to clone images
-* __DOCKER_PASSWORD__ : the password credential for the same account
-* __KUBECONFIG_DATA__ : the base64 encoded config file to connect to the kubernetes cluster where the application is deployed.
+* __KUBECONFIG_DATA_(DEV|PROD)__ : the base64 encoded config file to connect to the kubernetes cluster where the application is deployed. End it with DEV for the kubernetes dev cluster, and PROD for the Kubernetes production cluster.
 
 ### Deployment variables
 
