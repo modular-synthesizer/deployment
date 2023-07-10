@@ -19,7 +19,7 @@ jobs:
       - checkout
       - run:
           name: Configuration storage
-          command: cat ./environments/<< parameters.env >>.env >> $BASH_ENV
+          command: cat ./environments/<< parameters.env >>/.env >> $BASH_ENV
       - run:
           name: configuration traces
           command: echo $KUBE_NS
