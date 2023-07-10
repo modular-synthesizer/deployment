@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  kube: circleci/kubernetes@1.3.0
+
 parameters:
   env:
     type: string
@@ -21,11 +24,33 @@ jobs:
           name: Configuration storage
           command: cat ./environments/<< parameters.env >>/.env >> $BASH_ENV
       - run:
-          name: configuration traces
-          command: echo $KUBE_NS
+          name: Kubernetes config parse
+          command:
+      - kube/install-kubectl
+      - kube/install-kubeconfig
+      - setup_remote_docker:
+          version: 20.10.14
+      - run:
+          name: Authenticate on Docker HUB from environment variable
+          command: echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
+      - deploy_application:
+          repository: API_REPOSITORY
+      - deploy_application:
+          repository: GUI_REPOSITORY
 
 commands:
-
+  deploy_application:
+    parameters:
+      repository:
+        type: string
+        default: API_REPOSITORY
+    steps:
+      - run:
+          name: Tags storage
+          command: curl https://hub.docker.com/v2/repositories/${DOCKER_USERNAME}/${<< parameters.repository >>}/tags -o tags.json
+      - run:
+          name: Last version traces
+          command: export LAST_VERSION=$(cat tags.json | jq .results | jq .[0] | jq .name) && echo "export VERSION=${LAST_VERSION}" >> $BASH_ENV
 
 workflows:
   deploy-stack:
