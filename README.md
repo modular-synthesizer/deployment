@@ -9,7 +9,7 @@ This project holds all the logic to deploy an entire environment of the Synple a
 ### Environment variables
 
 Environment variables needed for the deployment to work are :
-* __KUBECONFIG_DATA_(DEV|PROD)__ : the base64 encoded config file to connect to the kubernetes cluster where the application is deployed. End it with DEV for the kubernetes dev cluster, and PROD for the Kubernetes production cluster.
+* **KUBECONFIG_DATA_(DEV|PROD)** : the base64 encoded config file to connect to the kubernetes cluster where the application is deployed. End it with DEV for the kubernetes dev cluster, and PROD for the Kubernetes production cluster.
 
 ### Deployment variables
 
