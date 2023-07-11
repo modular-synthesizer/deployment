@@ -70,7 +70,7 @@ commands:
     steps:
       - run:
           name: Deployment traces
-          command: echo "deploying version ${VERSION} in namespace ${KUBE_NS} and ingress path ${<< parameters.ingress_patj >>}"
+          command: echo "deploying version ${VERSION} in namespace ${KUBE_NS} and ingress path ${<< parameters.ingress_path >>}"
       - run:
           name: Kubernetes deployment update
           command: sed -e "s/<VERSION>/${VERSION}/g" -e "s/<NAMESPACE>/${KUBE_NS}/g" apps/<< parameters.app >>/deployment.yml | kubectl apply -f -
