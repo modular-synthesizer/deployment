@@ -39,6 +39,8 @@ spec:
                 secretKeyRef:
                   name: frontend-credentials
                   key: private-key
+            - name: NUXT_PUBLIC_PATH
+              value: <PUBLIC_PATH>
           resources:
             limits:
               cpu: 500m
