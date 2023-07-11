@@ -79,7 +79,7 @@ commands:
           command: sed -e "s/<NAMESPACE>/${KUBE_NS}/g" apps/<< parameters.app >>/service.yml | kubectl apply -f -
       - run:
           name: Kubernetes ingress update
-          command: sed -e "s/<NAMESPACE>/${KUBE_NS}/g" -e "s/<PREFIX>/<< parameters.ingress_path >>/g" apps/<< parameters.app >>/ingress.yml | kubectl apply -f -
+          command: sed -e "s/<NAMESPACE>/${KUBE_NS}/g" -e "s/<PATH>/<< parameters.ingress_path >>/g" apps/<< parameters.app >>/ingress.yml | kubectl apply -f -
 
 workflows:
   deploy-stack:
