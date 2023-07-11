@@ -24,6 +24,9 @@ jobs:
       app:
         type: string
         default: api
+      ingress_path:
+        type: string
+        default: "/*"
     steps:
       - checkout
       - run:
@@ -38,6 +41,7 @@ jobs:
           repository: << parameters.repository >>
       - deploy_stack:
           app: << parameters.app >>
+          ingress_path: << parameters.ingress_path >>
 
 commands:
   fetch_version:
@@ -60,6 +64,9 @@ commands:
       app:
         type: string
         default: api
+      ingress_path:
+        type: string
+        default: "/*"
     steps:
       - run:
           name: Deployment traces
