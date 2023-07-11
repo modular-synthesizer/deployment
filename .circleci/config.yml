@@ -66,13 +66,13 @@ commands:
           command: echo "deploying version ${VERSION} in namespace ${KUBE_NS} and ingress prefix ${INGRESS_PREFIX}"
       - run:
           name: Kubernetes deployment update
-          command: sed -e "s/<PREFIX>/${INGRESS_PREFIX}/g" -e "s/<VERSION>/${VERSION}/g" -e "s/<NAMESPACE>/${KUBE_NS}/g" apps/<< parameters.app >>/deployment.yml | kubectl apply -f -
+          command: sed -e "s/<VERSION>/${VERSION}/g" -e "s/<NAMESPACE>/${KUBE_NS}/g" apps/<< parameters.app >>/deployment.yml | kubectl apply -f -
       - run:
           name: Kubernetes service update
           command: sed -e "s/<NAMESPACE>/${KUBE_NS}/g" apps/<< parameters.app >>/service.yml | kubectl apply -f -
       - run:
           name: Kubernetes ingress update
-          command: sed -e "s/<NAMESPACE>/${KUBE_NS}/g" -e "s/<PREFIX>/${INGRESS_PREFIX}/g" apps/<< parameters.app >>/ingress.yml | kubectl apply -f -
+          command: sed -e "s/<NAMESPACE>/${KUBE_NS}/g" -e "s/<PREFIX>/<< parameters.ingress_path >>/g" apps/<< parameters.app >>/ingress.yml | kubectl apply -f -
 
 workflows:
   deploy-stack:
@@ -80,8 +80,10 @@ workflows:
       - deploy:
           env: << pipeline.parameters.env >>
           repository: GUI_REPOSITORY
+          ingress_path: GUI_INGRESS_PATH
           app: frontend
       - deploy:
           env: << pipeline.parameters.env >>
           repository: API_REPOSITORY
+          ingress_path: API_INGRESS_PATH
           app: api

@@ -11,7 +11,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: <PREFIX>(/|$)(.*)
+          - path: <PATH>
             pathType: Prefix
             backend:
               service:
