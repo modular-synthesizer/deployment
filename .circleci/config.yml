@@ -27,6 +27,9 @@ jobs:
       ingress_path:
         type: string
         default: "/*"
+      ingress_target:
+        type: string
+        default: "1"
     steps:
       - checkout
       - run:
@@ -42,6 +45,7 @@ jobs:
       - deploy_stack:
           app: << parameters.app >>
           ingress_path: << parameters.ingress_path >>
+          ingress_target: << parameters.ingress_target >>
 
 commands:
   fetch_version:
@@ -67,6 +71,9 @@ commands:
       ingress_path:
         type: string
         default: "/*"
+      ingress_target:
+        type: string
+        default: "1"
     steps:
       - run:
           name: Deployment traces
@@ -79,7 +86,7 @@ commands:
           command: sed -e "s#<NAMESPACE>#${KUBE_NS}#g" apps/<< parameters.app >>/service.yml | kubectl apply -f -
       - run:
           name: Kubernetes ingress update
-          command: sed -e "s#<NAMESPACE>#${KUBE_NS}#g" -e "s#<PATH>#${<< parameters.ingress_path >>}#g" apps/<< parameters.app >>/ingress.yml | kubectl apply -f -
+          command: sed -e "s#<NAMESPACE>#${KUBE_NS}#g" -e "s#<PATH>#${<< parameters.ingress_path >>}#g" -e "s#<TARGET>#${<< parameters.ingress_target >>}#g" apps/<< parameters.app >>/ingress.yml | kubectl apply -f -
 
 workflows:
   deploy-stack:
@@ -88,9 +95,11 @@ workflows:
           env: << pipeline.parameters.env >>
           repository: GUI_REPOSITORY
           ingress_path: GUI_INGRESS_PATH
+          ingress_target: GUI_REWRITE_TARGET
           app: frontend
       - deploy:
           env: << pipeline.parameters.env >>
           repository: API_REPOSITORY
           ingress_path: API_INGRESS_PATH
+          ingress_target: API_REWRITE_TARGET
           app: api
