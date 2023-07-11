@@ -39,6 +39,8 @@ spec:
                 secretKeyRef:
                   name: frontend-credentials
                   key: private-key
+            - name: NUXT_APP_BASE_URL
+              value: <PREFIX>/_nuxt/
           resources:
             limits:
               cpu: 500m

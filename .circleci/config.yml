@@ -66,7 +66,7 @@ commands:
           command: echo "deploying version ${VERSION} in namespace ${KUBE_NS} and ingress prefix ${INGRESS_PREFIX}"
       - run:
           name: Kubernetes deployment update
-          command: sed -e "s/<VERSION>/${VERSION}/g" -e "s/<NAMESPACE>/${KUBE_NS}/g" apps/<< parameters.app >>/deployment.yml | kubectl apply -f -
+          command: sed -e "s/<PREFIX>/${INGRESS_PREFIX}/g" -e "s/<VERSION>/${VERSION}/g" -e "s/<NAMESPACE>/${KUBE_NS}/g" apps/<< parameters.app >>/deployment.yml | kubectl apply -f -
       - run:
           name: Kubernetes service update
           command: sed -e "s/<NAMESPACE>/${KUBE_NS}/g" apps/<< parameters.app >>/service.yml | kubectl apply -f -
