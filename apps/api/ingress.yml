@@ -13,7 +13,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: "<PREFIX>/api(/|$)(.*)"
+          - path: <PATH>
             pathType: Prefix
             backend:
               service:
