@@ -90,7 +90,7 @@ commands:
           command:
             sed -e "s#<DATA>#${KUBECONFIG_DATA}#g" \
                 -e "s#<NAMESPACE>#${KUBE_NS}#g" \
-                apps/<< parameters.app >>/configmap.yml | kubectl apply -f -
+                apps/common/configmap.yml | kubectl apply -f -
       - run:
           name: Kubernetes deployment update
           command: |
