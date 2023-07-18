@@ -36,9 +36,9 @@ spec:
             - name: KUBE_NS
               value: <NAMESPACE>
           volumeMounts:
-            name: kubeconfig
-            mountPath: /etc
-            readOnly: true
+            - name: kubeconfig
+              mountPath: /etc
+              readOnly: true
       volumes:
         - name: kubeconfig
           secret:
