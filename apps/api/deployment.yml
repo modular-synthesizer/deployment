@@ -31,3 +31,7 @@ spec:
                 secretKeyRef:
                   name: api
                   key: database-uri
+            - name: KUBECONFIG
+              value: <KUBECONFIG>
+            - name: KUBE_NS
+              value: <NAMESPACE>
