@@ -30,6 +30,9 @@ jobs:
       ingress_target:
         type: string
         default: "1"
+      with_configmap:
+        type: boolean
+        default: false
     steps:
       - checkout
       - run:
@@ -46,6 +49,7 @@ jobs:
           app: << parameters.app >>
           ingress_path: << parameters.ingress_path >>
           ingress_target: << parameters.ingress_target >>
+          with_configmap: << parameters.with_configmap >>
 
 commands:
   fetch_version:
@@ -74,17 +78,25 @@ commands:
       ingress_target:
         type: string
         default: "1"
+      with_configmap:
+        type: boolean
+        default: false
     steps:
       - run:
           name: Deployment traces
           command: echo "deploying version ${VERSION} in namespace ${KUBE_NS} and ingress path ${<< parameters.ingress_path >>}"
+      - run:
+          name: Configmap update
+          command:
+            sed -e "s#<DATA>#$(base64 -d ${KUBECONFIG_DATA})#g" \
+                -e "s#<NAMESPACE>#${KUBE_NS}#g" \
+                apps/<< parameters.app >>/configmap.yml | kubectl apply -f -
       - run:
           name: Kubernetes deployment update
           command: |
             sed -e "s#<VERSION>#${VERSION}#g" \
                 -e "s#<NAMESPACE>#${KUBE_NS}#g" \
                 -e "s#<PUBLIC_PATH>#${GUI_PUBLIC_PATH}#g" \
-                -e "s#<KUBECONFIG>#${KUBECONFIG_DATA}#g" \
                 apps/<< parameters.app >>/deployment.yml | kubectl apply -f -
       - run:
           name: Kubernetes service update
@@ -105,6 +117,7 @@ workflows:
           repository: GUI_REPOSITORY
           ingress_path: GUI_INGRESS_PATH
           ingress_target: GUI_REWRITE_TARGET
+          with_configmap: true
           app: frontend
       - deploy:
           env: << pipeline.parameters.env >>
