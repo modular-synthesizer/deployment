@@ -87,7 +87,7 @@ commands:
           command: echo "deploying version ${VERSION} in namespace ${KUBE_NS} and ingress path ${<< parameters.ingress_path >>}"
       - run:
           name: Configmap update
-          command:
+          command: |
             sed -e "s#<DATA>#${KUBECONFIG_DATA}#g" \
                 -e "s#<NAMESPACE>#${KUBE_NS}#g" \
                 apps/common/configmap.yml | kubectl apply -f -
