@@ -32,12 +32,12 @@ spec:
                   name: api
                   key: database-uri
             - name: KUBECONFIG
-              value: "/etc/kubeconfig"
+              value: "/configurations/kubeconfig.yml"
             - name: KUBE_NS
               value: <NAMESPACE>
           volumeMounts:
             - name: kubeconfig
-              mountPath: /etc
+              mountPath: /configurations
               readOnly: true
       volumes:
         - name: kubeconfig
