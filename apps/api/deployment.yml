@@ -41,8 +41,5 @@ spec:
             readOnly: true
       volumes:
         - name: kubeconfig
-          configMap:
-            name: kube
-            items:
-              key: config
-              path: 'kubeconfig.yml'
+          secret:
+            secretName: kubeconfig

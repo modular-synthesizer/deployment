@@ -1,7 +1,7 @@
 apiVersion: v1
-kind: ConfigMap
+kind: Secret
 metadata:
-  name: kube
+  name: kubeconfig
   namespace: <NAMESPACE>
 data:
-  config: <DATA>
+  kubeconfig.yml: <DATA>
