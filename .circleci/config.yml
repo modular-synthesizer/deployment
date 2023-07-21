@@ -109,7 +109,7 @@ commands:
           command: |
             if [ '<< parameters.env >>' = 'dev' ]
             then
-              ANNOTATIONS="  annotations:\n    nginx.ingress.kubernetes.io/rewrite-target: /$<< parameters.ingress_target >>"
+              ANNOTATIONS="annotations:\n    nginx.ingress.kubernetes.io/rewrite-target: /$<< parameters.ingress_target >>"
             else
               ANNOTATIONS=""
             fi
