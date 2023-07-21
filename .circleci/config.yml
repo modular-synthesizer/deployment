@@ -109,10 +109,9 @@ commands:
       - run:
           name: Kubernetes ingress update
           command: |
-            wget -q https://github.com/mikefarah/yq/releases/download/4.2.0/yq_linux_386 -O yq
             if [ '<< parameters.env >>' = 'dev' ]
             then
-              ./yq 'metadata.annotations."nginx.ingress.kubernetes.io/rewrite-target" = "/$<< parameters.ingress_target >>"'
+              ./bin/yq 'metadata.annotations."nginx.ingress.kubernetes.io/rewrite-target" = "/$<< parameters.ingress_target >>"'
             fi
             sed -e "s#<NAMESPACE>#${KUBE_NS}#g" \
                 -e "s#<ANNOTATIONS>#${ANNOTATIONS}#g" \
