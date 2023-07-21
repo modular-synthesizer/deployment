@@ -2,7 +2,6 @@ version: 2.1
 
 orbs:
   kube: circleci/kubernetes@1.3.1
-  yq: nikkei/rnikkei-yq@0.0.3
 
 
 
@@ -88,8 +87,6 @@ commands:
         type: string
         default: dev
     steps:
-      - yq/install:
-          version: '4.2.0'
       - run:
           name: Deployment traces
           command: echo "deploying version ${VERSION} in namespace ${KUBE_NS} and ingress path ${<< parameters.ingress_path >>}"
@@ -112,9 +109,10 @@ commands:
       - run:
           name: Kubernetes ingress update
           command: |
+            wget -q https://github.com/mikefarah/yq/releases/download/4.2.0/yq_linux_386 -O yq
             if [ '<< parameters.env >>' = 'dev' ]
             then
-              yq 'metadata.annotations."nginx.ingress.kubernetes.io/rewrite-target" = "/$<< parameters.ingress_target >>"'
+              ./yq 'metadata.annotations."nginx.ingress.kubernetes.io/rewrite-target" = "/$<< parameters.ingress_target >>"'
             fi
             sed -e "s#<NAMESPACE>#${KUBE_NS}#g" \
                 -e "s#<ANNOTATIONS>#${ANNOTATIONS}#g" \
