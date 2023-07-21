@@ -107,7 +107,7 @@ commands:
       - run:
           name: Kubernetes ingress update
           command: |
-            if [ '<< parameters.env >>' = 'prod' ]
+            if [ '<< parameters.env >>' = 'dev' ]
             then
               ANNOTATIONS="  annotations:\n    nginx.ingress.kubernetes.io/rewrite-target: /$<< parameters.ingress_target >>"
             else
