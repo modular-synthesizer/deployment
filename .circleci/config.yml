@@ -109,9 +109,9 @@ commands:
           command: |
             if [ '<< parameters.env >>' = 'prod' ]
             then
-              ANNOTATIONS = "  annotations:\n    nginx.ingress.kubernetes.io/rewrite-target: /$<< parameters.ingress_target >>"
+              ANNOTATIONS="  annotations:\n    nginx.ingress.kubernetes.io/rewrite-target: /$<< parameters.ingress_target >>"
             else
-              ANNOTATIONS = ""
+              ANNOTATIONS=""
             fi
             sed -e "s#<NAMESPACE>#${KUBE_NS}#g" \
                 -e "s#<ANNOTATIONS>#${ANNOTATIONS}#g" \
