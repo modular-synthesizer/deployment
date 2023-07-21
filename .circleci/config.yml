@@ -111,7 +111,7 @@ commands:
           command: |
             if [ '<< parameters.env >>' = 'dev' ]
             then
-              ./bin/yq -i 'metadata.annotations."nginx.ingress.kubernetes.io/rewrite-target" = "/$<< parameters.ingress_target >>"' \
+              ./bin/yq -i 'metadata.annotations."nginx.ingress.kubernetes.io/rewrite-target" = "/$strenv(<< parameters.ingress_target >>)"' \
                 apps/<< parameters.app >>/ingress.yml
             fi
             sed -e "s#<NAMESPACE>#${KUBE_NS}#g" \
