@@ -3,8 +3,7 @@ kind: Ingress
 metadata:
   namespace: <NAMESPACE>
   name: frontend-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$<TARGET>
+  <ANNOTATIONS>
   labels:
     app: synple-gui
 spec:
