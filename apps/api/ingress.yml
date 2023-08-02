@@ -9,7 +9,7 @@ metadata:
     app: synple-api
 spec:
   tls:
-    - secretName: synple-app
+    - secretName: synple-certificates
   rules:
     - http:
         paths:
