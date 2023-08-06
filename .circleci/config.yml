@@ -124,6 +124,7 @@ workflows:
   deploy-stack:
     jobs:
       - deploy:
+          name: "Frontend deployment"
           env: << pipeline.parameters.env >>
           repository: GUI_REPOSITORY
           ingress_path: GUI_INGRESS_PATH
@@ -131,8 +132,16 @@ workflows:
           with_configmap: true
           app: frontend
       - deploy:
+          name: "API deployment"
           env: << pipeline.parameters.env >>
           repository: API_REPOSITORY
           ingress_path: API_INGRESS_PATH
           ingress_target: API_REWRITE_TARGET
           app: api
+      - deploy:
+          name: "Websockets deployment"
+          env: << pipeline.parameters.env >>
+          repository: WS_REPOSITORY
+          ingress_path: WS_INGRESS_PATH
+          ingress_target: WS_REWRITE_TARGET
+          app: websockets

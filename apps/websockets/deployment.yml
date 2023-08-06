@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: <NAMESPACE>
+  name: websockets-deployment
+  labels:
+    app: synple-websockets
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: synple-websockets
+  template:
+    metadata:
+      labels:
+        app: synple-websockets
+    spec:
+      dnsPolicy: Default
+      containers:
+        - name: synple-websockets
+          image: virtuatable/modusynth-websockets:<VERSION>
+          args:
+            - web
+          ports:
+            - containerPort: 3000
+          env:
+            - name: API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api
+                  key: url
+            - name: PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: frontend-credentials
+                  key: public-key
+            - name: PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: frontend-credentials
+                  key: private-key
+            - name: PORT
+              value: 3000
+          resources:
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 500m
+              memory: 128Mi
