@@ -29,6 +29,11 @@ spec:
                 configMapKeyRef:
                   name: api
                   key: url
+            - name: WS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api
+                  key: ws
             - name: PUBLIC_KEY
               valueFrom:
                 secretKeyRef:
