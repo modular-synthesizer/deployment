@@ -40,7 +40,7 @@ spec:
                   name: frontend-credentials
                   key: private-key
             - name: PORT
-              value: 3000
+              value: "3000"
           resources:
             limits:
               cpu: 500m
