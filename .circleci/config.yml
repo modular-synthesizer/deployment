@@ -34,6 +34,9 @@ jobs:
       with_configmap:
         type: boolean
         default: false
+      public_path:
+        type: string
+        default: GUI_PUBLIC_PATH
     steps:
       - checkout
       - run:
@@ -52,6 +55,7 @@ jobs:
           ingress_path: << parameters.ingress_path >>
           ingress_target: << parameters.ingress_target >>
           with_configmap: << parameters.with_configmap >>
+          public_path: << parameters.public_path >>
 
 commands:
   fetch_version:
@@ -83,6 +87,9 @@ commands:
       with_configmap:
         type: boolean
         default: false
+      public_path:
+        type: string
+        default: GUI_PUBLIC_PATH
       env:
         type: string
         default: dev
@@ -101,7 +108,7 @@ commands:
           command: |
             sed -e "s#<VERSION>#${VERSION}#g" \
                 -e "s#<NAMESPACE>#${KUBE_NS}#g" \
-                -e "s#<PUBLIC_PATH>#${GUI_PUBLIC_PATH}#g" \
+                -e "s#<PUBLIC_PATH>#${<< parameters.public_path >>}#g" \
                 apps/<< parameters.app >>/deployment.yml | kubectl apply -f -
       - run:
           name: Kubernetes service update
@@ -131,6 +138,7 @@ workflows:
           ingress_target: GUI_REWRITE_TARGET
           with_configmap: true
           app: frontend
+          public_path: GUI_PUBLIC_PATH
       - deploy:
           name: "API deployment"
           env: << pipeline.parameters.env >>
@@ -145,3 +153,4 @@ workflows:
           ingress_path: WS_INGRESS_PATH
           ingress_target: WS_REWRITE_TARGET
           app: websockets
+          public_path: WS_PUBLIC_PATH
