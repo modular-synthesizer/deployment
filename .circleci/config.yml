@@ -102,30 +102,32 @@ commands:
           command: |
             sed -e "s#<DATA>#${KUBECONFIG_DATA}#g" \
                 -e "s#<NAMESPACE>#${KUBE_NS}#g" \
-                apps/common/configmap.yml | kubectl apply -f -
+                /home/circleci/project/apps/common/configmap.yml | kubectl apply -f -
       - run:
           name: Kubernetes deployment update
           command: |
             sed -e "s#<VERSION>#${VERSION}#g" \
                 -e "s#<NAMESPACE>#${KUBE_NS}#g" \
                 -e "s#<PUBLIC_PATH>#${<< parameters.public_path >>}#g" \
-                apps/<< parameters.app >>/deployment.yml | kubectl apply -f -
+                /home/circleci/project/apps/<< parameters.app >>/deployment.yml | kubectl apply -f -
       - run:
           name: Kubernetes service update
-          command: sed -e "s#<NAMESPACE>#${KUBE_NS}#g" apps/<< parameters.app >>/service.yml | kubectl apply -f -
+          command: |
+            sed -e "s#<NAMESPACE>#${KUBE_NS}#g" \
+            /home/circleci/project/apps/<< parameters.app >>/service.yml | kubectl apply -f -
       - run:
           name: Kubernetes ingress update
           command: |
             if [ '<< parameters.env >>' = 'dev' ]
             then
               ./bin/yq -i 'metadata.annotations."nginx.ingress.kubernetes.io/rewrite-target" = "/$strenv(<< parameters.ingress_target >>)"' \
-                apps/<< parameters.app >>/ingress.yml
+                /home/circleci/project/apps/<< parameters.app >>/ingress.yml
             fi
             sed -e "s#<NAMESPACE>#${KUBE_NS}#g" \
                 -e "s#<ANNOTATIONS>#${ANNOTATIONS}#g" \
                 -e "s#<PATH>#${<< parameters.ingress_path >>}#g" \
                 -e "s#<TARGET>#${<< parameters.ingress_target >>}#g" \
-                apps/<< parameters.app >>/ingress.yml | kubectl apply -f -
+                /home/circleci/project/apps/<< parameters.app >>/ingress.yml | kubectl apply -f -
 
 workflows:
   deploy-stack:
