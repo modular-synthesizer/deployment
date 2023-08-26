@@ -42,10 +42,7 @@ spec:
           resources:
             requests:
               memory: "64Mi"
-              cpu: "250m"
-            limits:
-              memory: "64Mi"
-              cpu: "250m"
+              cpu: "8m"
       volumes:
         - name: kubeconfig
           secret:
